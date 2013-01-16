@@ -38,15 +38,13 @@ class Bangou
 		digits.each_with_index.map do |digit, power|
 			num   = digit.to_i
 			text  = NUMERALS[num]
+			base = 10 ** power
 			if num > 0
 				if power > 4
-					# 100,000    => 10 * 10,000
-					# 1,000,000  => 100 * 10,000
-					# 10,000,000 => 1,000 * 10,000
-					text += BASES[(10 ** power)/10000]
+					text += BASES[base/10000]
 					text += BASES[10000] unless digits.size > 1 and (digits[0..power - 1] & ("1".."9").to_a).size > 0
 				else
-					text += BASES[10 ** power]
+					text += BASES[base]
 				end
 			end
 			text = text[1..-1] if text =~ /^一.+/
@@ -58,20 +56,22 @@ class Bangou
 		return "ぜろ" if int == 0
 		digits = int.to_s.split(//).reverse
 		digits.each_with_index.map do |digit, power|
-			combine_digit_with_base(digit.to_i, 10 ** power)
-		end.reverse.join
-	end
-
-	def self.combine_digit_with_base num, base
-		if num > 0
+			num  = digit.to_i
+			base = 10 ** power
 			if value = EXCEPTIONS_TEXT[num * base]
 				value
 			else
-				NUMERALS_TEXT[num] + BASES_TEXT[base]
+				if num > 0
+					if power > 4
+						text = EXCEPTIONS_TEXT[num * base/10000] || NUMERALS_TEXT[num] + BASES_TEXT[base/10000]
+						text += BASES_TEXT[10000] unless digits.size > 1 and (digits[0..power - 1] & ("1".."9").to_a).size > 0
+					else
+						text = NUMERALS_TEXT[num] + BASES_TEXT[base]
+					end
+				end
+				text
 			end
-		else
-			NUMERALS_TEXT[num]
-		end
+		end.reverse.join
 	end
 
 	def self.japanese_text_to_integer text

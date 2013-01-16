@@ -65,6 +65,14 @@ describe "Bangou" do
 			compare(30000, "さんまん")
 			compare(60000, "ろくまん")
 			compare(80000, "はちまん")
+
+			compare(300000, "さんじゅうまん")
+			compare(600000, "ろくじゅうまん")
+			compare(800000, "はちじゅうまん")
+
+			compare(3000000, "さんびゃくまん")
+			compare(6000000, "ろっぴゃくまん")
+			compare(8000000, "はっぴゃくまん")
 		end
 	end
 end
