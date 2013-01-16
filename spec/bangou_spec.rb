@@ -26,9 +26,10 @@ describe "Bangou" do
 		end
 
 		it "can handle bases above 10^4" do
-			compare(100000,  "十万")
-			compare(1000000, "百万")
-			compare(22000000,  "二千二十万")
+			compare(100000,    "十万")
+			compare(1000000,   "百万")
+			compare(50000000,  "五千万")
+			compare(22000000,  "二千二百万")
 		end
 	end
 
@@ -63,7 +64,7 @@ describe "Bangou" do
 
 			compare(30000, "さんまん")
 			compare(60000, "ろくまん")
-			compare(80000, "はっまん")
+			compare(80000, "はちまん")
 		end
 	end
 end

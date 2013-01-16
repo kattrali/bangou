@@ -26,7 +26,7 @@ class Bangou
 		1000 => "せん", 10000 => "まん"
 	}
 
-	EXCEPTIONS = {
+	EXCEPTIONS_TEXT = {
 		300  => "さんびゃく", 600  => "ろっぴゃく",
 		800  => "はっぴゃく",
 		3000 => "さんぜん",   8000 => "はっせん"
@@ -40,7 +40,11 @@ class Bangou
 			text  = NUMERALS[num]
 			if num > 0
 				if power > 4
-					text += BASES[10 ** 3]
+					# 100,000    => 10 * 10,000
+					# 1,000,000  => 100 * 10,000
+					# 10,000,000 => 1,000 * 10,000
+					text += BASES[(10 ** power)/10000]
+					text += BASES[10000] unless digits.size > 1 and (digits[0..power - 1] & ("1".."9").to_a).size > 0
 				else
 					text += BASES[10 ** power]
 				end
@@ -60,7 +64,7 @@ class Bangou
 
 	def self.combine_digit_with_base num, base
 		if num > 0
-			if value = EXCEPTIONS[num * base]
+			if value = EXCEPTIONS_TEXT[num * base]
 				value
 			else
 				NUMERALS_TEXT[num] + BASES_TEXT[base]
