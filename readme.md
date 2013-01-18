@@ -14,6 +14,10 @@ Bangou.integer_to_japanese_text(2305)
 # => "にせんさんびゃくご"
 ```
 
+## Installation
+
+`gem install bangou`
+
 ## Running Tests
 
 番号 uses bacon for testing, runnable using `rake spec`.
