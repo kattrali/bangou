@@ -20,7 +20,7 @@ describe "Bangou" do
 
 		it "can parse digits in different places in a number, ignoring zeroes" do
 			compare(7509,  "七千五百九")
-			compare(80000, "八万")
+			compare(81000, "八万千")
 			compare(80001, "八万一")
 			compare(80020, "八万二十")
 		end

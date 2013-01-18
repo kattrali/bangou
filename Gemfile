@@ -1,6 +1,5 @@
 source :rubygems
 
-group :development do
+group :development, :test do
 	gem "bacon"
-	gem "pry"
 end

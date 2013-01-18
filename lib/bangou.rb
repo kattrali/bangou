@@ -2,7 +2,17 @@
 
 class Bangou
 
-	NUMERALS = {
+	def self.integer_to_japanese_numerals int
+    convert_number(int, :numerals)
+	end
+
+	def self.integer_to_japanese_text int
+    convert_number(int, :text)
+	end
+
+  private
+
+  NUMERALS = {
 		0 => "",   1 => "一", 2 => "二",
 		3 => "三", 4 => "四", 5 => "五",
 		6 => "六", 7 => "七", 8 => "八",
@@ -32,52 +42,45 @@ class Bangou
 		3000 => "さんぜん",   8000 => "はっせん"
 	}
 
-	def self.integer_to_japanese_numerals int
-		return "０" if int == 0
-		digits = int.to_s.split(//).reverse
-		digits.each_with_index.map do |digit, power|
-			num   = digit.to_i
-			text  = NUMERALS[num]
-			base = 10 ** power
-			if num > 0
-				if power > 4
-					text += BASES[base/10000]
-					text += BASES[10000] unless digits.size > 1 and (digits[0..power - 1] & ("1".."9").to_a).size > 0
-				else
-					text += BASES[base]
-				end
-			end
-			text = text[1..-1] if text =~ /^一.+/
-			text
-		end.reverse.join
-	end
+  EXCEPTIONS = {}
 
-	def self.integer_to_japanese_text int
-		return "ぜろ" if int == 0
-		digits = int.to_s.split(//).reverse
+  ZEROES = {
+    :text    => "ぜろ",
+    :numeral => "０"
+  }
+
+  def self.exceptions num, format
+    format == :text ? EXCEPTIONS_TEXT[num] : EXCEPTIONS[num]
+  end
+
+  def self.numerals num, format
+    format == :text ? NUMERALS_TEXT[num] : NUMERALS[num]
+  end
+
+  def self.bases num, format
+    format == :text ? BASES_TEXT[num] : BASES[num]
+  end
+
+  def self.convert_number int, format
+    return ZEROES[format] if int == 0
+    digits = int.to_s.split(//).reverse
 		digits.each_with_index.map do |digit, power|
 			num  = digit.to_i
 			base = 10 ** power
-			if value = EXCEPTIONS_TEXT[num * base]
+			if value = exceptions(num * base, format)
 				value
 			else
 				if num > 0
 					if power > 4
-						text = EXCEPTIONS_TEXT[num * base/10000] || NUMERALS_TEXT[num] + BASES_TEXT[base/10000]
-						text += BASES_TEXT[10000] unless digits.size > 1 and (digits[0..power - 1] & ("1".."9").to_a).size > 0
+						text = exceptions(num * base/10000, format) || numerals(num, format) + bases(base/10000, format)
+						text += bases(10000, format) unless digits.size > 1 and (digits[0..power - 1] & ("1".."9").to_a).size > 0
 					else
-						text = NUMERALS_TEXT[num] + BASES_TEXT[base]
+						text = numerals(num, format) + bases(base, format)
 					end
 				end
+        text = text[1..-1] if text =~ /^一.+/ and text.split(//).length > 1
 				text
 			end
 		end.reverse.join
-	end
-
-	def self.japanese_text_to_integer text
-	end
-
-	def self.japanese_text_to_japanese_numerals text
-		integer_to_japanese_numerals(japanese_text_to_integer(text))
-	end
+  end
 end
