@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 class Bangou
+  class OutOfRangeException < Exception; end
 
 	def self.integer_to_japanese_numerals int
     convert_number(int, :numerals)
@@ -9,6 +10,10 @@ class Bangou
 	def self.integer_to_japanese_text int
     convert_number(int, :text)
 	end
+
+  def self.in_range? int
+    int >= 0 and int < 100000000
+  end
 
   private
 
@@ -62,6 +67,7 @@ class Bangou
   end
 
   def self.convert_number int, format
+    raise OutOfRangeException.new("Bangou can only process numbers between 0 and 99,999,999") unless in_range?(int)
     return ZEROES[format] if int == 0
     digits = int.to_s.split(//).reverse
 		digits.each_with_index.map do |digit, power|

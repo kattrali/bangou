@@ -20,10 +20,15 @@ describe "Bangou" do
 
 		it "can parse digits in different places in a number, ignoring zeroes" do
 			compare(7509,  "七千五百九")
-			compare(81000, "八万千")
+			compare(80000, "八万")
 			compare(80001, "八万一")
 			compare(80020, "八万二十")
 		end
+
+    it "removes unneeded ones" do
+      compare(81000, "八万千")
+			compare(10100, "万百")
+    end
 
 		it "can handle bases above 10^4" do
 			compare(100000,    "十万")
@@ -31,6 +36,21 @@ describe "Bangou" do
 			compare(50000000,  "五千万")
 			compare(22000000,  "二千二百万")
 		end
+
+    it "raises OutOfRangeException if given a number out of usable range" do
+      should.raise(Bangou::OutOfRangeException) {
+        Bangou.integer_to_japanese_numerals(100000000)
+      }
+      should.raise(Bangou::OutOfRangeException) {
+        Bangou.integer_to_japanese_numerals(-1)
+      }
+      should.not.raise(Bangou::OutOfRangeException) {
+        Bangou.integer_to_japanese_numerals(99999999)
+      }
+      should.not.raise(Bangou::OutOfRangeException) {
+        Bangou.integer_to_japanese_numerals(0)
+      }
+    end
 	end
 
 	describe "changes integers into Japanese text" do
@@ -38,12 +58,22 @@ describe "Bangou" do
 			Bangou.integer_to_japanese_text(integer).should.equal(text)
 		end
 
-		it "can parse digits in different places in a number, ignoring zeroes" do
+		it "ignores zeroes, unless the number is just zero" do
 			compare(7509,  "ななせんごひゃくきゅう")
+      compare(0,     "ぜろ")
 			compare(80000, "はちまん")
 			compare(80001, "はちまんいち")
 			compare(80020, "はちまんにじゅう")
 		end
+
+    it "raises OutOfRangeException if given a number out of usable range" do
+      should.raise(Bangou::OutOfRangeException) {
+        Bangou.integer_to_japanese_text(100000000)
+      }
+      should.not.raise(Bangou::OutOfRangeException) {
+        Bangou.integer_to_japanese_text(99999999)
+      }
+    end
 
 		it "uses the correct transformation for 3, 6, and 8" do
 			compare(3, "さん")
