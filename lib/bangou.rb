@@ -71,23 +71,32 @@ class Bangou
     return ZEROES[format] if int == 0
     digits = int.to_s.split(//).reverse
 		digits.each_with_index.map do |digit, power|
-			num  = digit.to_i
-			base = 10 ** power
-			if value = exceptions(num * base, format)
-				value
-			else
-				if num > 0
-					if power > 4
-						text = exceptions(num * base/10000, format) || numerals(num, format) + bases(base/10000, format)
-						text += bases(10000, format) unless digits.size > 1 and (digits[0..power - 1] & ("1".."9").to_a).size > 0
-					else
-						text = numerals(num, format) + bases(base, format)
-					end
-				end
-        text = text[1..-1] if text =~ /^(一).+/
-        text = text[2..-1] if text =~ /^(いち).+/
-				text
-			end
+			hide_base_from_value = has_more_digits_before_index?(digits, power)
+			characters_for_digit_in_base(digit.to_i, 10 ** power, format, hide_base_from_value)
 		end.reverse.join
   end
+
+  def self.strip_unneeded_characters text
+		text = text[1..-1] if text =~ /^(一).+/
+		text = text[2..-1] if text =~ /^(いち).+/
+		text
+	end
+
+	def self.has_more_digits_before_index?(digits, index)
+		digits.size > 1 and (digits[0..index - 1] & ("1".."9").to_a).size > 0
+	end
+
+  def self.characters_for_digit_in_base(num, base, format, hide_base_from_value)
+		if text = exceptions(num * base, format)
+			text
+		else
+			if num > 0 and base > 10000
+				text = exceptions(num * base/10000, format) || characters_for_digit_in_base(num, base/10000, format, hide_base_from_value)
+				text += bases(10000, format) unless hide_base_from_value
+			elsif num > 0
+				text = numerals(num, format) + bases(base, format)
+			end
+			strip_unneeded_characters(text)
+		end
+	end
 end

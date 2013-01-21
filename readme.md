@@ -2,6 +2,8 @@
 
 A Ruby library for converting between positive integers and Sino-Japanese numbers or text.
 
+[![Build Status](https://travis-ci.org/kattrali/bangou.png?branch=master)](undefined)
+
 ## Usage
 
 ```
