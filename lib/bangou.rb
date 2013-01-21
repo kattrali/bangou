@@ -52,7 +52,7 @@ class Bangou
   EXCEPTIONS = {}
 
   ZEROES = {
-    :text    => "ぜろ",
+    :text    => "ゼロ",
     :numeral => "０"
   }
 

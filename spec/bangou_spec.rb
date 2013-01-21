@@ -60,7 +60,7 @@ describe "Bangou" do
 
 		it "ignores zeroes, unless the number is just zero" do
 			compare(7509,  "ななせんごひゃくきゅう")
-      compare(0,     "ぜろ")
+      compare(0,     "ゼロ")
 			compare(80000, "はちまん")
 			compare(80001, "はちまんいち")
 			compare(80020, "はちまんにじゅう")
