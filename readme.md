@@ -2,12 +2,19 @@
 
 A Ruby library for converting between positive integers and Sino-Japanese numbers or text.
 
-[![Build Status](https://travis-ci.org/kattrali/bangou.png?branch=master)](undefined)
+[![Build Status](https://travis-ci.org/kattrali/bangou.png?branch=master)](Build Status)
 
 ## Usage
 
 ```
 require 'bangou'
+
+
+89.to_j
+# => "八十九"
+
+289.to_jtext
+# => "二百八十九"
 
 Bangou.integer_to_japanese_numerals(2305)
 # => "二千三百五"

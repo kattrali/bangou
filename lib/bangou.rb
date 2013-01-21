@@ -1,5 +1,7 @@
 # encoding: UTF-8
 
+require 'extensions/integer.rb'
+
 class Bangou
   class OutOfRangeException < Exception; end
 
