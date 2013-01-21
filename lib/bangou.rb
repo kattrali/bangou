@@ -4,7 +4,7 @@ class Bangou
   class OutOfRangeException < Exception; end
 
 	def self.integer_to_japanese_numerals int
-    convert_number(int, :numerals)
+    convert_number(int, :numeral)
 	end
 
 	def self.integer_to_japanese_text int
@@ -84,7 +84,8 @@ class Bangou
 						text = numerals(num, format) + bases(base, format)
 					end
 				end
-        text = text[1..-1] if text =~ /^一.+/ and text.split(//).length > 1
+        text = text[1..-1] if text =~ /^(一).+/
+        text = text[2..-1] if text =~ /^(いち).+/
 				text
 			end
 		end.reverse.join
