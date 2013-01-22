@@ -5,14 +5,37 @@ require 'extensions/integer.rb'
 class Bangou
   class OutOfRangeException < Exception; end
 
-	def self.integer_to_japanese_numerals int
+  # Convert an Integer into Japanese numerals
+  #
+  # Example:
+  #   Bangou.integer_to_japanese_numerals(89)
+  #   # => "八十九"
+  #
+  # @param [Integer] the number to convert
+  # @return [String] The Japanese numeric equivalent in kanji
+  def self.integer_to_japanese_numerals int
     convert_number(int, :numeral)
-	end
+  end
 
-	def self.integer_to_japanese_text int
+  # Convert an Integer into Sino-Japanese number
+  # spelling in hiragana or katakana
+  #
+  # Examples:
+  #   Bangou.integer_to_japanese_text(823)
+  #   # => "はっぴゃくにじゅうさん"
+  #   Bangou.integer_to_japanese_text(0)
+  #   # => "ゼロ"
+  #
+  # @param [Integer] the number to convert
+  # @return [String] The Sino-Japanese numeric equivalent in kana
+  def self.integer_to_japanese_text int
     convert_number(int, :text)
-	end
+  end
 
+  # Detect whether a given number can be processed
+  # by this class
+  #
+  # @return [Boolean]
   def self.in_range? int
     int >= 0 and int < 100000000
   end
@@ -30,21 +53,21 @@ class Bangou
 		9 => ["九","きゅう"]
 	}
 
-	BASES = {
-		1     => ["",""],
-		10    => ["十","じゅう"],
-		100   => ["百","ひゃく"],
-		1000  => ["千","せん"],
-		10000 => ["万","まん"]
-	}
+  BASES = {
+    1     => ["",""],
+    10    => ["十","じゅう"],
+    100   => ["百","ひゃく"],
+    1000  => ["千","せん"],
+    10000 => ["万","まん"]
+  }
 
-	EXCEPTIONS = {
-		300  => [nil,"さんびゃく"],
-		600  => [nil,"ろっぴゃく"],
-		800  => [nil,"はっぴゃく"],
-		3000 => [nil,"さんぜん"],
-		8000 => [nil,"はっせん"]
-	}
+  EXCEPTIONS = {
+    300  => [nil,"さんびゃく"],
+    600  => [nil,"ろっぴゃく"],
+    800  => [nil,"はっぴゃく"],
+    3000 => [nil,"さんぜん"],
+    8000 => [nil,"はっせん"]
+  }
 
   ZEROES = {
     :text    => "ゼロ",
@@ -85,8 +108,8 @@ class Bangou
   end
 
   def self.has_more_digits_after_index?(digits, index)
-		digits.size > 1 and (digits[0..index - 1] & ("1".."9").to_a).size > 0
-	end
+    digits.size > 1 and (digits[0..index - 1] & ("1".."9").to_a).size > 0
+  end
 
   def self.characters_for_digit_in_base(num, base, format, hide_base_from_value)
     return "" if num == 0

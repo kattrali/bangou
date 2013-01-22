@@ -2,7 +2,7 @@
 
 A Ruby library for converting between positive integers and Sino-Japanese numbers or text.
 
-[![Build Status](https://travis-ci.org/kattrali/bangou.png?branch=master)](https://travis-ci.org/kattrali/bangou)
+[![Build Status](https://travis-ci.org/kattrali/bangou.png?branch=master)](https://travis-ci.org/kattrali/bangou) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/kattrali/bangou)
 
 ## Usage
 
